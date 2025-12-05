@@ -62,5 +62,4 @@
 - [Qwen 大模型 (阿里)](https://huggingface.co/Qwen)
 - [ChnSentiCorp 数据集](https://github.com/SophonPlus/ChineseNlpCorpus)
 - transformers / pytorch / Huggingface 社区
-
 欢迎交流、star 和提出改进建议！
