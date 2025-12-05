@@ -154,5 +154,5 @@ for i, (comment, true_sent) in enumerate(tqdm(comments)):
 # 6. 保存为 CSV
 # ----------------------------
 df_out = pd.DataFrame(results)
-df_out.to_csv("prompt_experiment_results.csv", index=False, encoding="utf-8-sig")
+df_out.to_csv("./output/prompt_experiment_results.csv", index=False, encoding="utf-8-sig")
 print("\n实验完成！结果已保存至：prompt_experiment_results.csv")
