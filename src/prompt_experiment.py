@@ -99,16 +99,19 @@ def generate_response(prompt, max_new_tokens=70):
         )
     response = tokenizer.decode(outputs[0], skip_special_tokens=True)
     # 只保留模型生成部分（去掉 Prompt）
-    if "请严格按照以下格式输出" in response:
-        return response.split("请严格按照以下格式输出")[-1].strip()
+    if "请严格按照以下格式输出,不要任何解释：" in response:
+        return response.split("请严格按照以下格式输出,不要任何解释：")[-1].strip()
     else:
         return response.strip()
 
 # ----------------------------
 # 5. 主实验流程
 # ----------------------------
+# 加载和准备待分析的酒店评论数据。通过 load_comments() 函数读取所有评论，comments 变量中存储着每条评论及其真实情感标签。
+# 初始化一个空列表 results 用于存储处理结果。接着输出要处理的评论总数及将使用三种 Prompt 策略（零样本、少样本、思维链/COT）。
+# 最后，使用 tqdm 让进度可视化，遍历每条评论及其真实情感，为后续处理做准备。
 comments = load_comments()
-print(f"原始评论：{comments}")
+# print(f"原始评论：{comments}")
 results = []
 
 print(f"开始处理 {len(comments)} 条评论，三种 Prompt 策略...")
@@ -135,11 +138,11 @@ for i, (comment, true_sent) in enumerate(tqdm(comments)):
         row["few_shot"] = f"ERROR: {str(e)}"
 
     # 思维链
-    # try:
-    #     resp2 = generate_response(cot_prompt(comment))
-    #     row["cot"] = resp2
-    # except Exception as e:
-    #     row["cot"] = f"ERROR: {str(e)}"
+    try:
+        resp2 = generate_response(cot_prompt(comment))
+        row["cot"] = resp2
+    except Exception as e:
+        row["cot"] = f"ERROR: {str(e)}"
 
     results.append(row)
 
@@ -152,5 +155,4 @@ for i, (comment, true_sent) in enumerate(tqdm(comments)):
 # ----------------------------
 df_out = pd.DataFrame(results)
 df_out.to_csv("prompt_experiment_results.csv", index=False, encoding="utf-8-sig")
-print("\n✅ 实验完成！结果已保存至：prompt_experiment_results.csv")
-print("建议人工抽查前50行，评估格式正确率与标签合理性。")
+print("\n实验完成！结果已保存至：prompt_experiment_results.csv")
