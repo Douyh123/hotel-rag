@@ -13,6 +13,6 @@ Finally, the generated results are saved as a CSV file.
 
 1. Clone (download) this repository.
 
-2. Run the command: `pip install -rrequirements.txt`
+2. Run the command: `pip install -r requirements.txt`
 
 3. Run the command: `python hints_experiments.py`
